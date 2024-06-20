@@ -20,10 +20,8 @@ const facilitySchema = new Schema<TFacility>({
     },
     isDeleted: {
         type: Boolean,
-        required: true,
         default: false
     }
-
 })
 
 export const Facility = model<TFacility>('Facility', facilitySchema)
