@@ -11,3 +11,5 @@ export type TSignup = {
     email: string;
     password: string;
   }
+
+  export type TUserRoles = "user" | "admin"

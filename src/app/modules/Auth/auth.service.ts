@@ -3,6 +3,8 @@ import AppError from "../../errors/AppError";
 import { TLogin, TSignup } from "./auth.interface";
 import { User } from "./auth.model";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import config from "../../config";
 
 const createUserIntoDB = async (payload:TSignup) => {
     const newUser = await User.create(payload);
@@ -22,13 +24,28 @@ const loginUser = async (payload:TLogin) => {
     if (!passwordMatched) {
         throw new AppError(httpStatus.NOT_FOUND, 'Invalid Password');
     }
-    return {
+
+    const jwtPayload = {
         _id: userExists?._id,
-        name: userExists?.name,
         email: userExists?.email,
-        phone: userExists?.phone,
-        role: userExists?.role,
-        address: userExists?.address,
+        role: userExists?.role
+    }
+
+    const accessToken = jwt.sign(
+        jwtPayload
+      , config.jwt_access_secret as string, { expiresIn: '10d' });
+
+    return {
+        token: accessToken,
+        data: {
+            _id: userExists?._id,
+            name: userExists?.name,
+            email: userExists?.email,
+            phone: userExists?.phone,
+            role: userExists?.role,
+            address: userExists?.address,
+        }
+        
     };
 }
 

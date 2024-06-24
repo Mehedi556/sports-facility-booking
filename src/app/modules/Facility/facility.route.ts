@@ -2,6 +2,7 @@ import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { FacilityValidationSchema } from './facility.validation';
 import { FacilityControllers } from './facility.controller';
+import auth from '../../middlewares/auth';
 
 
 
@@ -9,6 +10,7 @@ const router = express.Router();
 
 router.post(
   '/',
+  auth("admin"),
   validateRequest(
     FacilityValidationSchema.CreateValidationSchema
   ),
@@ -16,8 +18,9 @@ router.post(
 );
 
 
-router.patch(
+router.put(
   '/:id',
+  auth("admin"),
   validateRequest(
     FacilityValidationSchema.UpdateValidationSchema
   ),
@@ -26,6 +29,6 @@ router.patch(
 
 router.get('/', FacilityControllers.getAllFacilities);
 
-router.delete('/:id', FacilityControllers.deleteFacility);
+router.delete('/:id', auth("admin"), FacilityControllers.deleteFacility);
 
 export const FacilityRoutes = router;
