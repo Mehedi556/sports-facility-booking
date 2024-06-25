@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+import express, { Application, Request, Response } from 'express'
 import router from './app/routes';
 import cors from 'cors';
 // import globalErrorHandler from './app/middlewares/globalErrorHandler';
@@ -11,9 +11,9 @@ app.use(cors())
 
 app.use('/api', router);
 
-// app.get('/', (req: Request, res: Response) => {
-//   res.send('Hello World!!')
-// })
+app.get('/', (req: Request, res: Response) => {
+  res.send('Sports Facility Booking app is running..')
+})
 
 app.use(globalErrorHandler);
 
