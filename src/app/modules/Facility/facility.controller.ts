@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import sendResponse from '../../utils/sendResponse';
 import { FacilityServices } from './facility.service';
 import catchAsync from '../../utils/catchAsync';
+import noDataFoundResponse from '../../utils/noDataFoundResponse';
 
 const createFacility = catchAsync(async (req, res) => {
   const result = await FacilityServices.createFacilityIntoDB(req.body);
@@ -9,7 +10,7 @@ const createFacility = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Facility is created successfully',
+    message: 'Facility added successfully',
     data: result,
   });
 });
@@ -17,12 +18,23 @@ const createFacility = catchAsync(async (req, res) => {
 const getAllFacilities = catchAsync(async (req, res) => {
   const result = await FacilityServices.getAllFacilitiesFromDB();
 
-  sendResponse(res, {
+  if(result?.length < 1){
+    noDataFoundResponse(res, {
+      success: false,
+      statusCode: 404,
+      message: "No Data Found",
+      data: result
+    })
+  } else {
+    sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Facilities are retrieved successfully',
+    message: 'Facilities retrieved successfully',
     data: result,
   });
+  }
+
+  
 });
 
 
@@ -30,24 +42,46 @@ const updateFacility = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await FacilityServices.updateFacilityIntoDB(id, req.body);
 
-  sendResponse(res, {
+  if(!result){
+    noDataFoundResponse(res, {
+      success: false,
+      statusCode: 404,
+      message: "No Data Found",
+      data: result
+    })
+  } else{
+    sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Facility is updated successfully',
+    message: 'Facility updated successfully',
     data: result,
   });
+}
+
+  
 });
 
 const deleteFacility = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await FacilityServices.deleteFacilityFromDB(id);
 
-  sendResponse(res, {
+  if(!result){
+    noDataFoundResponse(res, {
+      success: false,
+      statusCode: 404,
+      message: "No Data Found",
+      data: result
+    })
+  }else {
+    sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Facility is deleted successfully',
+    message: 'Facility deleted successfully',
     data: result,
   });
+  }
+
+  
 });
 
 export const FacilityControllers = {

@@ -20,7 +20,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   ];
 
   if (err instanceof ZodError) {
-    console.log(err);
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
@@ -40,7 +39,8 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  } else if (err instanceof AppError) {
+  }
+   else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err.message;
     errorSources = [
@@ -61,6 +61,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   return res.status(statusCode).json({
     success: false,
+    statusCode,
     message,
     errorSources,
     err,

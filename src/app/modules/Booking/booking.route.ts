@@ -27,7 +27,7 @@ auth("user"),
 router.get('/', auth("admin"), BookingControllers.getAllBookings);
 
 router.get('/check-availability', 
-    // auth("admin", "user"), 
+    auth("admin", "user"), 
     BookingControllers.checkAvailability);
 
 router.delete('/:id', auth("user"), BookingControllers.deleteBooking);

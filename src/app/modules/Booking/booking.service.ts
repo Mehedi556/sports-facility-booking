@@ -6,7 +6,15 @@ import { Request } from "express";
 import config from "../../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-
+const totalSlots = [
+  { startTime: "06:00", endTime: "08:00" },
+  { startTime: "08:00", endTime: "10:00" },
+  { startTime: "10:00", endTime: "12:00" },
+  { startTime: "12:00", endTime: "14:00" },
+  { startTime: "14:00", endTime: "16:00" },
+  { startTime: "16:00", endTime: "18:00" },
+  { startTime: "18:00", endTime: "20:00" },
+];
 
 const createBookingIntoDB = async (req: Request) => {
   const facilityData = await Facility.findById(req.body?.facility)
@@ -17,7 +25,7 @@ const createBookingIntoDB = async (req: Request) => {
   let token = req.headers.authorization;
   token = token?.replace("Bearer ", "")
         if (!token) {
-            throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+            throw new AppError(401, 'You have no access to this route');
         }
 
         const decoded = jwt.verify(
@@ -44,8 +52,30 @@ const getAllBookingsFromDB = async () => {
 };
 
 const checkingAvailabilityFromDB = async (req: Request) => {
-  console.log(req.query);
 
+  const date = req.query.date || new Date().toISOString().split('T')[0];
+
+  const bookings = await Booking.find({ date });
+
+  const bookedSlots = bookings.map((booking) => ({
+    startTime: booking?.startTime,
+    endTime: booking?.endTime
+  }));
+
+  const availableSlots = totalSlots.filter((slot) => {
+    let isAvailable = true;
+
+    for(const booked of bookedSlots){
+      if(booked.startTime === slot.startTime && booked.endTime === slot.endTime){
+        isAvailable = false;
+        break;
+      }
+    }
+
+    return isAvailable;
+  })
+
+  return availableSlots;
 }
 
 const getAllBookingsForUserFromDB = async (req: Request) => {
@@ -53,7 +83,7 @@ const getAllBookingsForUserFromDB = async (req: Request) => {
   let token = req.headers.authorization;
   token = token?.replace("Bearer ", "")
         if (!token) {
-            throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+            throw new AppError(401, 'You have no access to this route');
         }
 
         const decoded = jwt.verify(
