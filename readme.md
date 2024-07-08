@@ -1,11 +1,17 @@
-# E-commerce Management System Application
+# Sports Facility Booking Application
+
+Project live link:
+https://sports-facility-booking-nine.vercel.app
 
 It's a Node.js application built with Node.js, Express.js and TypeScript.
 
-First of all you need to clone the repository. Here is the repository link:
-https://github.com/Mehedi556/ecommerce-management-system-backend
 
-In the command prompt, full command is ( git clone https://github.com/Mehedi556/ecommerce-management-system-backend )
+## Set up application
+
+First of all you need to clone the repository. Here is the repository link:
+https://github.com/Mehedi556/sports-facility-booking
+
+In the command prompt, full command is ( git clone https://github.com/Mehedi556/sports-facility-booking.git )
 
 Then go to the downloaded repository by cd (repository name) or manually.
 
@@ -38,9 +44,15 @@ for start the server.
 
 Important Environment Variables are:
 
-    DB_URL=mongodb+srv://<DBId>:<DBPassword>@cluster01.emwzks8564.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-    
+    DATABASE_URL=mongodb+srv://sports-facility-booking:rCP8owKbHtPLikjL@cluster0.emwzks8.mongodb.net/sports-facility-booking?retryWrites=true&w=majority&appName=Cluster0
+
     PORT=5000
+
+    NODE_ENV=development
+
+    BCRYPT_SALT_ROUNDS=10
+
+    JWT_ACCESS_SECRET=1a2b934f28957cbe5b340b8bc082bf64c01f18d78b404679f0ae648279176b1d
 
 
 ### For any questions about this project, just send me a message to salam.mehedi99@gmail.com. I will try my best to reply as early as possible. Thank you..
