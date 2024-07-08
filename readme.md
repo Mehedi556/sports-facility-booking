@@ -11,7 +11,7 @@ It's a Node.js application built with Node.js, Express.js and TypeScript.
 First of all you need to clone the repository. Here is the repository link:
 https://github.com/Mehedi556/sports-facility-booking
 
-In the command prompt, full command is ( git clone https://github.com/Mehedi556/sports-facility-booking.git )
+In the command prompt you have to write this command. The full command is ( git clone https://github.com/Mehedi556/sports-facility-booking.git )
 
 Then go to the downloaded repository by cd (repository name) or manually.
 
