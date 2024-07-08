@@ -37,10 +37,13 @@ To run the application in production mode, you need to build the project first a
 
 for build.
 
+
     npm run start:prod 
 
 
 for start the server.
+
+
 
 Important Environment Variables are:
 
