@@ -9,7 +9,6 @@ import { TErrorSources } from '../interface/error';
 import { ErrorRequestHandler } from 'express';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  // console.log(err);
   let statusCode = 500;
   let message = 'Something went wrong!';
   let errorSources: TErrorSources = [
@@ -63,8 +62,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     statusCode,
     message,
-    errorSources,
-    err,
+    errorMessages: errorSources,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
   });
 };

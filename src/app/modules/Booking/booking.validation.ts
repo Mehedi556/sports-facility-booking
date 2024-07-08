@@ -7,5 +7,5 @@ export const BookingValidationSchema = z.object({
     user: z.string().optional(),
     facility: z.string(),
     payableAmount: z.number().optional(),
-    isBooked: z.enum(['confirmed', 'unconfirmed', 'canceled']),
+    isBooked: z.enum(['confirmed', 'unconfirmed', 'canceled']).optional(),
 })

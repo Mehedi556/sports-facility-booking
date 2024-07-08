@@ -7,17 +7,26 @@ import config from "../../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 const totalSlots = [
-  { startTime: "06:00", endTime: "08:00" },
-  { startTime: "08:00", endTime: "10:00" },
-  { startTime: "10:00", endTime: "12:00" },
-  { startTime: "12:00", endTime: "14:00" },
-  { startTime: "14:00", endTime: "16:00" },
-  { startTime: "16:00", endTime: "18:00" },
-  { startTime: "18:00", endTime: "20:00" },
-];
+  { startTime: "06:00", endTime: "07:00" },
+  { startTime: "07:00", endTime: "08:00" },
+  { startTime: "08:00", endTime: "09:00" },
+  { startTime: "09:00", endTime: "10:00" },
+  { startTime: "10:00", endTime: "11:00" },
+  { startTime: "11:00", endTime: "12:00" },
+  { startTime: "12:00", endTime: "13:00" },
+  { startTime: "13:00", endTime: "14:00" },
+  { startTime: "14:00", endTime: "15:00" },
+  { startTime: "15:00", endTime: "16:00" },
+  { startTime: "16:00", endTime: "17:00" },
+  { startTime: "17:00", endTime: "18:00" },
+  { startTime: "18:00", endTime: "19:00" },
+  { startTime: "19:00", endTime: "20:00" }
+]
+
 
 const createBookingIntoDB = async (req: Request) => {
   const facilityData = await Facility.findById(req.body?.facility)
+  req.body.isBooked = 'confirmed';
   if(!facilityData){
     throw new AppError(httpStatus.NOT_FOUND, 'This facility is not available !');
   }
@@ -55,7 +64,7 @@ const checkingAvailabilityFromDB = async (req: Request) => {
 
   const date = req.query.date || new Date().toISOString().split('T')[0];
 
-  const bookings = await Booking.find({ date });
+  const bookings = await Booking.find({ date, isBooked: 'confirmed' });
 
   const bookedSlots = bookings.map((booking) => ({
     startTime: booking?.startTime,
@@ -66,7 +75,12 @@ const checkingAvailabilityFromDB = async (req: Request) => {
     let isAvailable = true;
 
     for(const booked of bookedSlots){
-      if(booked.startTime === slot.startTime && booked.endTime === slot.endTime){
+      const bookedStartTime = new Date(`1970-01-01T${booked.startTime}:00Z`);
+      const bookedEndTime = new Date(`1970-01-01T${booked.endTime}:00Z`);
+      const slotStartTime = new Date(`1970-01-01T${slot.startTime}:00Z`);
+      const slotEndTime = new Date(`1970-01-01T${slot.endTime}:00Z`);
+
+      if(!(bookedEndTime <= slotStartTime || bookedStartTime >= slotEndTime)){
         isAvailable = false;
         break;
       }
