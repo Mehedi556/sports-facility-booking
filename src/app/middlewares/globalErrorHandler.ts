@@ -1,5 +1,4 @@
 import { ZodError } from 'zod';
-import config from '../config';
 import AppError from '../errors/AppError';
 import handleCastError from '../errors/handleCastError';
 import handleDuplicateError from '../errors/handleDuplicateError';
@@ -63,7 +62,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode,
     message,
     errorMessages: errorSources,
-    stack: config.NODE_ENV === 'development' ? err?.stack : null,
+    stack: err?.stack 
   });
 };
 

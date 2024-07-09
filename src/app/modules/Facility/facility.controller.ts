@@ -4,6 +4,7 @@ import { FacilityServices } from './facility.service';
 import catchAsync from '../../utils/catchAsync';
 import noDataFoundResponse from '../../utils/noDataFoundResponse';
 
+// This controller is for create Facility.
 const createFacility = catchAsync(async (req, res) => {
   const result = await FacilityServices.createFacilityIntoDB(req.body);
 
@@ -15,9 +16,11 @@ const createFacility = catchAsync(async (req, res) => {
   });
 });
 
+// This controller is for get all facilities Facility.
 const getAllFacilities = catchAsync(async (req, res) => {
   const result = await FacilityServices.getAllFacilitiesFromDB();
 
+  // checking if the length of data is less then 1 then it will show (No data found) response.
   if(result?.length < 1){
     noDataFoundResponse(res, {
       success: false,
@@ -37,7 +40,7 @@ const getAllFacilities = catchAsync(async (req, res) => {
   
 });
 
-
+// This controller is for update Facility.
 const updateFacility = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await FacilityServices.updateFacilityIntoDB(id, req.body);
@@ -61,6 +64,7 @@ const updateFacility = catchAsync(async (req, res) => {
   
 });
 
+// This controller is for delete Facility.
 const deleteFacility = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await FacilityServices.deleteFacilityFromDB(id);

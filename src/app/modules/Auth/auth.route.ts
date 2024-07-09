@@ -6,12 +6,14 @@ import { AuthControllers } from './auth.controller';
 
 const router = express.Router();
 
+// this route is created for create user
 router.post(
   '/signup',
   validateRequest(SignupValidationSchema),
   AuthControllers.createUser,
 );
 
+// this route is created for login user
 router.post(
   '/login',
   validateRequest(LoginValidationSchema),

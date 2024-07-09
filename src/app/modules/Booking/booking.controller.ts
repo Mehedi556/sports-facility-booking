@@ -4,6 +4,7 @@ import catchAsync from '../../utils/catchAsync';
 import { BookingServices } from './booking.service';
 import noDataFoundResponse from '../../utils/noDataFoundResponse';
 
+// controller for create booking
 const createBooking = catchAsync(async (req, res) => {
   const result = await BookingServices.createBookingIntoDB(req);
 
@@ -15,6 +16,7 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
+// controller for get all bookings for admin
 const getAllBookings = catchAsync(async (req, res) => {
   const result = await BookingServices.getAllBookingsFromDB();
 
@@ -35,7 +37,7 @@ const getAllBookings = catchAsync(async (req, res) => {
 }
 });
 
-
+// controller for get all bookings for user
 const getAllBookingsForUser = catchAsync(async (req, res) => {
   const result = await BookingServices.getAllBookingsForUserFromDB(req);
 
@@ -56,7 +58,7 @@ const getAllBookingsForUser = catchAsync(async (req, res) => {
 }
 });
 
-
+// controller for checking availability
 const checkAvailability = catchAsync(async (req, res) => {
   const result = await BookingServices.checkingAvailabilityFromDB(req);
 
@@ -77,6 +79,7 @@ const checkAvailability = catchAsync(async (req, res) => {
 }
 });
 
+// controller for cancel booking
 const deleteBooking = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await BookingServices.cancelBookingFromDB(id);

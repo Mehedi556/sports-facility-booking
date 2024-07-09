@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { AuthServices } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 
+// This controller created for create new user
 const createUser = catchAsync(async (req, res) => {
   
     const result = await AuthServices.createUserIntoDB(req.body);
@@ -22,6 +23,7 @@ const createUser = catchAsync(async (req, res) => {
     });
   });
 
+  // This controller created for login
 const loginUser = catchAsync(async (req, res) => {
     const result = await AuthServices.loginUser(req.body);
     

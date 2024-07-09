@@ -23,14 +23,17 @@ const totalSlots = [
   { startTime: "19:00", endTime: "20:00" }
 ]
 
-
+// This service created for create new booking into DB
 const createBookingIntoDB = async (req: Request) => {
+  // firstly I'm trying to find the facility data by facility id which is coming with booking data. if data not found by this id then throwing error.
   const facilityData = await Facility.findById(req.body?.facility)
   req.body.isBooked = 'confirmed';
+
   if(!facilityData){
     throw new AppError(httpStatus.NOT_FOUND, 'This facility is not available !');
   }
 
+  // then I'm trying to check the token. if not valid then throwing error
   let token = req.headers.authorization;
   token = token?.replace("Bearer ", "")
         if (!token) {
@@ -43,7 +46,8 @@ const createBookingIntoDB = async (req: Request) => {
         ) as JwtPayload;
 
         const { _id } = decoded;
-
+  
+  // here I'm trying to find out payableAmount by start and end time. 
   const start = new Date(`1970-01-01T${req.body?.endTime}`);
   const end = new Date(`1970-01-01T${req.body?.startTime}`);
 
@@ -51,21 +55,30 @@ const createBookingIntoDB = async (req: Request) => {
   
   req.body.payableAmount = (milliSeconds / (1000 * 60 * 60) ) * facilityData?.pricePerHour;
   req.body.user = _id;
+
+  // here I'm creating new booking.
   const result = await Booking.create(req.body);
   return result;
 };
 
+
+// This service created for get all bookings for admin from DB
 const getAllBookingsFromDB = async () => {
   const result = await Booking.find().populate("user").populate("facility");
   return result;
 };
 
+
+// This service created for checking available slots into DB
 const checkingAvailabilityFromDB = async (req: Request) => {
 
+  // First I'm trying to store a date in variable. If user not sending specific date then I'm storing todays date by default.
   const date = req.query.date || new Date().toISOString().split('T')[0];
 
+  // then trying to find data from DB by that predefined date
   const bookings = await Booking.find({ date, isBooked: 'confirmed' });
 
+  // then I'm converting booked all data by only startTime and endTime like [ { startTime: "10:00", endTime: "12:00"}, { startTime: "13:00", endTime: "16:00"} ]
   const bookedSlots = bookings.map((booking) => ({
     startTime: booking?.startTime,
     endTime: booking?.endTime
@@ -80,6 +93,8 @@ const checkingAvailabilityFromDB = async (req: Request) => {
       const slotStartTime = new Date(`1970-01-01T${slot.startTime}:00Z`);
       const slotEndTime = new Date(`1970-01-01T${slot.endTime}:00Z`);
 
+      // In the if statement I tried to filter available slots. The logic is that, the booked slot will be ends before current slot start and also the booked slot starts after the current slot ends. So if this two conditions or any one condition is true, then it will not overlap. so I'm checking for overlap by the reversing non-overlapping condition so It will give overlap slots. When overlap slot will come then isAvailable will be set to false and loop will break. It means that the slot is not available.
+
       if(!(bookedEndTime <= slotStartTime || bookedStartTime >= slotEndTime)){
         isAvailable = false;
         break;
@@ -92,8 +107,11 @@ const checkingAvailabilityFromDB = async (req: Request) => {
   return availableSlots;
 }
 
+
+// This service created for get all bookings for user from DB
 const getAllBookingsForUserFromDB = async (req: Request) => {
 
+  // checking token
   let token = req.headers.authorization;
   token = token?.replace("Bearer ", "")
         if (!token) {
@@ -111,8 +129,9 @@ const getAllBookingsForUserFromDB = async (req: Request) => {
   return result;
 };
 
-
+// This service created for cancel booking into DB
 const cancelBookingFromDB = async (id: string) => {
+  // finding the data by id then soft delete
     const result = await Booking.findByIdAndUpdate(
       id,
       { isBooked: 'canceled' },
