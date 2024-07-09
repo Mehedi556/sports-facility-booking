@@ -119,7 +119,7 @@ const cancelBookingFromDB = async (id: string) => {
       {
         new: true,
       },
-    );
+    ).populate('facility');
     return result;
   };
 
