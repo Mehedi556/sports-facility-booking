@@ -47,7 +47,7 @@ for start the server.
 
 Important Environment Variables are:
 
-    DATABASE_URL=mongodb+srv://sports-facility-booking:rCP8owKbHtPLikjL@cluster0.emwzks8.mongodb.net/sports-facility-booking?retryWrites=true&w=majority&appName=Cluster0
+    DATABASE_URL=mongodb+srv://<name>:<password>@cluster0.emwks8.mongodb.net/sports-facility-booking?retryWrites=true&w=majority&appName=Cluster0
 
     PORT=5000
 
@@ -55,7 +55,7 @@ Important Environment Variables are:
 
     BCRYPT_SALT_ROUNDS=10
 
-    JWT_ACCESS_SECRET=1a2b934f28957cbe5b340b8bc082bf64c01f18d78b404679f0ae648279176b1d
+    JWT_ACCESS_SECRET=
 
 
 ### For any questions about this project, just send me a message to salam.mehedi99@gmail.com. I will try my best to reply as early as possible. Thank you..
